@@ -211,12 +211,16 @@ export default function App() {
   };
 
   const promptInstall = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-    }
-  };
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  } else {
+    // No native prompt available (iOS Safari, or the browser is suppressing it)
+    setShowInstallHelp(true);
+  }
+};
+
 
   // 4) Friendly empty-state for category-only emptiness
   const isOnlyCategoryEmpty =

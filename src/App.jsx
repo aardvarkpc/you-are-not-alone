@@ -4,6 +4,44 @@ const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS22WsDk6
 const IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent);
 const thumb = (id) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
+// Build a YouTube URL (web)
+const ytUrl = (v) => v.url || `https://www.youtube.com/watch?v=${v.id}`;
+
+// Try to open YouTube app; fall back to web if not installed
+function openYouTubeSmart(v) {
+  const web = ytUrl(v);
+  const id  = v.id || '';
+  // iOS scheme
+  const iosScheme = `youtube://www.youtube.com/watch?v=${id}`;
+  // Android & general scheme
+  const genericScheme = `vnd.youtube://${id}`;
+
+  const started = Date.now();
+  if (IS_IOS) {
+    // Try iOS app; if it doesn't take focus quickly, fall back to web
+    window.location.href = iosScheme;
+    setTimeout(() => {
+      if (Date.now() - started < 1500) window.location.href = web;
+    }, 700);
+  } else {
+    // Try Android app; quick fallback to web
+    window.location.href = genericScheme;
+    setTimeout(() => { window.location.href = web; }, 700);
+  }
+}
+
+// Build a short “preview” line from tags or category
+const briefLine = (v) => {
+  const tags = (v.tags || '')
+    .split('|')
+    .map(s => s.trim())
+    .filter(Boolean)
+    .slice(0, 3)
+    .map(t => `#${t}`)
+    .join('  ');
+  return tags || (v.category || '');
+};
+
 // Build a YouTube URL that opens well on iOS/Android/desktop
 const ytUrl = (v) => v.url || `https://www.youtube.com/watch?v=${v.id}`;
 

@@ -252,6 +252,16 @@ export default function App(){
   )}
 </div>
 
+            {/* brief tags/description line under the thumbnail/buttons */}
+<div style={{
+  padding:"8px 12px",
+  fontSize:12,
+  color:"#475569",
+  borderTop:"1px solid #f1f5f9",
+  background:"#fafafa"
+}}>
+  {briefLine(v)}
+</div>
 
             <div style={{padding:"12px"}}>
               <h3 style={{margin:"0 0 6px",fontWeight:700}}>{v.title}</h3>

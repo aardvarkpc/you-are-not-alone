@@ -158,41 +158,74 @@ export default function App(){
 
             {/* iPhone-safe player block */}
             <div style={{aspectRatio:"16/9",width:"100%",position:"relative",background:"#000"}}>
-              {IS_IOS ? (
-                <button
-                  onClick={() => window.location.href = v.url || `https://youtu.be/${v.id}`}
-                  aria-label={`Play ${v.title}`}
-                  style={{all:"unset",cursor:"pointer",display:"block",width:"100%",height:"100%",position:"relative"}}
-                >
-                  <img
-                    src={thumb(v.id)}
-                    alt={v.title}
-                    loading="lazy"
-                    style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}
-                  />
-                  <div
-                    style={{
-                      position:"absolute",inset:0,display:"grid",placeItems:"center",
-                      background:"linear-gradient(0deg, rgba(0,0,0,.35), rgba(0,0,0,.15))"
-                    }}
-                  >
-                    <div style={{
-                      width:64,height:64,borderRadius:"50%",background:"rgba(255,255,255,.9)",
-                      display:"grid",placeItems:"center",fontSize:24,fontWeight:700,color:"#e11d48"
-                    }}>▶</div>
-                  </div>
-                </button>
-              ) : (
-                <iframe
-                  style={{width:"100%",height:"100%",border:0}}
-                  src={`https://www.youtube-nocookie.com/embed/${v.id}?autoplay=0&modestbranding=1&playsinline=1&rel=0`}
-                  title={v.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              )}
-            </div>
+  {IS_IOS ? (
+    // iPhone/iPad mini preview — avoids crash
+    <div style={{width:"100%",height:"100%",position:"relative"}}>
+      <img
+        src={thumb(v.id)}
+        alt={v.title}
+        loading="lazy"
+        style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}
+      />
+      <div
+        style={{
+          position:"absolute",
+          inset:0,
+          background:"linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45))"
+        }}
+      />
+      <div
+        style={{
+          position:"absolute",
+          left:12,
+          right:12,
+          bottom:12,
+          display:"flex",
+          gap:8,
+          flexWrap:"wrap"
+        }}
+      >
+        <button
+          onClick={()=>window.location.href = ytUrl(v)}
+          style={{
+            border:"0",
+            borderRadius:10,
+            padding:"8px 12px",
+            fontSize:13,
+            fontWeight:700,
+            background:"#ff0000",
+            color:"#fff"
+          }}
+        >
+          ▶ Watch on YouTube
+        </button>
+        <button
+          onClick={()=>shareYT(v)}
+          style={{
+            border:"1px solid #e2e8f0",
+            borderRadius:10,
+            padding:"8px 12px",
+            fontSize:13,
+            background:"#fff"
+          }}
+        >
+          Share / Copy link
+        </button>
+      </div>
+    </div>
+  ) : (
+    // Desktop / Android normal embed
+    <iframe
+      style={{width:"100%",height:"100%",border:0}}
+      src={`https://www.youtube-nocookie.com/embed/${v.id}?autoplay=0&modestbranding=1&playsinline=1&rel=0`}
+      title={v.title}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+      loading="lazy"
+    />
+  )}
+</div>
+
 
             <div style={{padding:"12px"}}>
               <h3 style={{margin:"0 0 6px",fontWeight:700}}>{v.title}</h3>

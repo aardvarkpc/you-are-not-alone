@@ -151,6 +151,12 @@ export default function App(){
   const shuffleOne=()=>{if(!filtered.length)return;const idx=Math.floor(Math.random()*filtered.length);document.getElementById(`card-${filtered[idx].id}`)?.scrollIntoView({behavior:'smooth',block:'center'});};
   const promptInstall=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;}};
 
+  const isOnlyCategoryEmpty =
+  filtered.length === 0 &&
+  activeCats.length > 0 &&
+  !query.trim() &&
+  !onlyFavs;
+
   return(
   <div className="min-h-screen" style={{background:"#f8fafc",color:"#0f172a",padding:"24px"}}>
     <div style={{maxWidth:"1100px",margin:"0 auto"}}>

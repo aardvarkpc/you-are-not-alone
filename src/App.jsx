@@ -224,7 +224,7 @@ export default function App(){
         }}
       >
         <button
-          onClick={()=>window.location.href = ytUrl(v)}
+          onClick={() => openYouTubeSmart(v)}
           style={{
             border:"0",
             borderRadius:10,

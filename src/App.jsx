@@ -147,7 +147,7 @@ export default function App(){
             <div style={{aspectRatio:"16/9",width:"100%",position:"relative",background:"#000"}}>
               {IS_IOS ? (
                 <button
-                  onClick={() => window.open(v.url || `https://youtu.be/${v.id}`, '_blank')}
+                  onClick={() => window.location.href = v.url || `https://youtu.be/${v.id}`}
                   aria-label={`Play ${v.title}`}
                   style={{all:"unset",cursor:"pointer",display:"block",width:"100%",height:"100%",position:"relative"}}
                 >

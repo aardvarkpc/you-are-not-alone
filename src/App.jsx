@@ -199,18 +199,6 @@ export default function App(){
         >
           ▶ Watch on YouTube
         </button>
-        <button
-          onClick={()=>shareYT(v)}
-          style={{
-            border:"1px solid #e2e8f0",
-            borderRadius:10,
-            padding:"8px 12px",
-            fontSize:13,
-            background:"#fff"
-          }}
-        >
-          Share / Copy link
-        </button>
       </div>
     </div>
   ) : (

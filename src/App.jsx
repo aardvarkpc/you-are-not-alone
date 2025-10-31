@@ -144,6 +144,7 @@ export default function App() {
   const [items, setItems] = useState([]);
   const [onlyFavs, setOnlyFavs] = useState(false);
   const [loadMsg, setLoadMsg] = useState("");
+  const [showInstallHelp, setShowInstallHelp] = useState(false);
 
   useEffect(() => {
     registerServiceWorker();

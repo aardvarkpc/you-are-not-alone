@@ -4,6 +4,19 @@ const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS22WsDk6
 const IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent);
 const thumb = (id) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
+// Build a YouTube URL that opens well on iOS/Android/desktop
+const ytUrl = (v) => v.url || `https://www.youtube.com/watch?v=${v.id}`;
+
+// Share or copy link fallback
+const shareYT = async (v) => {
+  const url = ytUrl(v);
+  try {
+    if (navigator.share) { await navigator.share({ title: v.title || "YouTube", url }); }
+    else if (navigator.clipboard) { await navigator.clipboard.writeText(url); alert("Link copied"); }
+    else { window.prompt("Copy this link:", url); }
+  } catch { /* user canceled share */ }
+};
+
 const CATEGORY_LIST = [
   "Relationships","Confidence & Self-Worth","Anxiety & Calm","Career & Purpose",
   "Productivity & Focus","Mindset & Change","Life Coaching Insights",

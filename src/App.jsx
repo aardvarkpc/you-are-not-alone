@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-const SHEET_CSV_URL = "/data/shorts.csv";
+const SHEET_CSV_URL = "https://drive.google.com/uc?export=download&id=1HH4k2rq-SgGBC6DHvJ4Zl5b9RO4AQZ-R";
 const CATEGORY_LIST = ["Relationships","Confidence & Self-Worth","Anxiety & Calm","Career & Purpose","Productivity & Focus","Mindset & Change","Life Coaching Insights","Emotional Balance","Health & Self-Care","Family & Connection"];
 function classNames(...xs){return xs.filter(Boolean).join(" ");}
 function useLocalStorage(key, initialValue){const [v,setV]=useState(()=>{try{const i=localStorage.getItem(key);return i?JSON.parse(i):initialValue;}catch(_){return initialValue}});useEffect(()=>{try{localStorage.setItem(key,JSON.stringify(v));}catch(_){}},[key,v]);return [v,setV];}

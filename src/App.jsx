@@ -5,6 +5,15 @@ const SHEET_CSV_URL =
 
 const IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent);
 
+// Helpers (1,2,3)
+const thumb = (id) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+const ytUrl = (v) => v.url || `https://www.youtube.com/watch?v=${v.id}`;
+function openYouTubeSmart(v) {
+  // Simple, reliable behavior: open web URL in same tab.
+  // (If you want app-deeplink, we can add it back later.)
+  window.location.href = ytUrl(v);
+}
+
 const CATEGORY_LIST = [
   "Relationships",
   "Confidence & Self-Worth",
@@ -107,9 +116,7 @@ function parseCSVToObjects(text) {
 function registerServiceWorker() {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .catch(() => {});
+      navigator.serviceWorker.register("/service-worker.js").catch(() => {});
     });
   }
 }
@@ -185,9 +192,7 @@ export default function App() {
 
   const toggleFav = (id) =>
     setFavorites((prev) =>
-      prev.includes(id)
-        ? prev.filter((v) => v !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
     );
 
   const clearFilters = () => {
@@ -211,6 +216,10 @@ export default function App() {
       deferredPrompt = null;
     }
   };
+
+  // 4) Friendly empty-state for category-only emptiness
+  const isOnlyCategoryEmpty =
+    filtered.length === 0 && activeCats.length > 0 && !query.trim() && !onlyFavs;
 
   return (
     <div
@@ -406,15 +415,65 @@ export default function App() {
                 overflow: "hidden",
               }}
             >
-              <div style={{ aspectRatio: "16/9", width: "100%" }}>
-                <iframe
-                  style={{ width: "100%", height: "100%" }}
-                  src={`https://www.youtube.com/embed/${v.id}?rel=0&modestbranding=1&playsinline=1`}
-                  title={v.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
+              {/* 1) iOS-safe video block; 6) lazy loading */}
+              <div style={{ aspectRatio: "16/9", width: "100%", position: "relative", background: "#000" }}>
+                {IS_IOS ? (
+                  /* iPhone/iPad: no iframe to avoid crash */
+                  <div style={{ width: "100%", height: "100%", position: "relative" }}>
+                    <img
+                      src={thumb(v.id)}
+                      alt={v.title}
+                      loading="lazy"
+                      onError={(e) => { e.currentTarget.src = `https://img.youtube.com/vi/${v.id}/0.jpg`; }}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45))",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: 12,
+                        right: 12,
+                        bottom: 12,
+                        display: "flex",
+                        gap: 8,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <button
+                        onClick={() => openYouTubeSmart(v)}
+                        style={{
+                          border: "0",
+                          borderRadius: 10,
+                          padding: "8px 12px",
+                          fontSize: 13,
+                          fontWeight: 700,
+                          background: "#ff0000",
+                          color: "#fff",
+                        }}
+                      >
+                        ▶ Watch on YouTube
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* Desktop/Android: keep inline player */
+                  <iframe
+                    style={{ width: "100%", height: "100%", border: 0 }}
+                    src={`https://www.youtube.com/embed/${v.id}?rel=0&modestbranding=1&playsinline=1`}
+                    title={v.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                )}
               </div>
+
               <div style={{ padding: "12px" }}>
                 <h3 style={{ margin: "0 0 6px", fontWeight: 700 }}>
                   {v.title}
@@ -485,17 +544,13 @@ export default function App() {
                     onClick={() => toggleFav(v.id)}
                     style={{
                       border: "1px solid #e2e8f0",
-                      background: favorites.includes(v.id)
-                        ? "#fde68a"
-                        : "#fff",
+                      background: favorites.includes(v.id) ? "#fde68a" : "#fff",
                       borderRadius: "10px",
                       padding: "6px 10px",
                       fontSize: "12px",
                     }}
                   >
-                    {favorites.includes(v.id)
-                      ? "★ Favorited"
-                      : "☆ Favorite"}
+                    {favorites.includes(v.id) ? "★ Favorited" : "☆ Favorite"}
                   </button>
                   {v.duration ? (
                     <span style={{ fontSize: "11px", color: "#64748b" }}>
@@ -510,16 +565,12 @@ export default function App() {
           ))}
         </div>
 
+        {/* 4) Friendly empty-state */}
         {filtered.length === 0 && (
-          <div
-            style={{
-              textAlign: "center",
-              padding: "40px 0",
-              color: "#64748b",
-            }}
-          >
-            No videos match your filters. Try clearing them or searching
-            different terms.
+          <div style={{ textAlign: "center", padding: "40px 0", color: "#64748b" }}>
+            {isOnlyCategoryEmpty
+              ? "More videos coming soon in this category!"
+              : "No videos match your filters. Try clearing them or searching different terms."}
           </div>
         )}
       </div>

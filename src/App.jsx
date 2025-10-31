@@ -293,6 +293,29 @@ export default function App() {
               Clear Filters
             </button>
           </div>
+          {showInstallHelp && (
+  <div style={{
+    background:"#fff7ed", border:"1px solid #fdba74", color:"#7c2d12",
+    borderRadius:12, padding:"10px 12px", marginBottom:12, fontSize:13
+  }}>
+    {IS_IOS ? (
+      <div>
+        <strong>Install on iPhone:</strong> Open in Safari → tap <em>Share</em> → <em>Add to Home Screen</em>.
+        <div style={{opacity:.8, marginTop:6}}>
+          Tip: iOS doesn’t show a native install popup; using Share is the official way.
+        </div>
+      </div>
+    ) : (
+      <div>
+        <strong>Install this app:</strong> Use your browser’s menu and choose <em>Install</em> / <em>Install App</em>.
+        <div style={{opacity:.8, marginTop:6}}>
+          If you dismissed the prompt earlier, the browser may temporarily hide it. You can still install from the menu.
+        </div>
+      </div>
+    )}
+  </div>
+)}
+
         </header>
 
         <div

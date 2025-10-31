@@ -190,14 +190,15 @@ export default function App(){
           <article id={`card-${v.id}`} key={v.id} style={{background:"#fff",border:"1px solid #e2e8f0",borderRadius:"16px",overflow:"hidden"}}>
 
             {/* iPhone-safe player block */}
-            <div style={{aspectRatio:"16/9",width:"100%",position:"relative",background:"#000"}}>
+ <div style={{aspectRatio:"16/9",width:"100%",position:"relative",background:"#000"}}>
   {IS_IOS ? (
-    // iPhone/iPad mini preview — avoids crash
+    /* iPhone/iPad mini preview — avoids crash */
     <div style={{width:"100%",height:"100%",position:"relative"}}>
       <img
         src={thumb(v.id)}
         alt={v.title}
         loading="lazy"
+        onError={(e)=>{ e.currentTarget.src = `https://img.youtube.com/vi/${v.id}/0.jpg`; }}
         style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}
       />
       <div
@@ -235,7 +236,7 @@ export default function App(){
       </div>
     </div>
   ) : (
-    // Desktop / Android normal embed
+    /* Desktop / Android normal embed */
     <iframe
       style={{width:"100%",height:"100%",border:0}}
       src={`https://www.youtube-nocookie.com/embed/${v.id}?autoplay=0&modestbranding=1&playsinline=1&rel=0`}

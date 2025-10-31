@@ -296,10 +296,13 @@ export default function App(){
       </div>
 
       {filtered.length===0&&(
-        <div style={{textAlign:"center",padding:"40px 0",color:"#64748b"}}>
-          No videos match your filters. Try clearing them or searching different terms.
-        </div>
-      )}
+  <div style={{textAlign:"center",padding:"40px 0",color:"#64748b"}}>
+    {activeCats.length > 0
+      ? "More videos coming soon in this category!"
+      : "No videos match your filters. Try clearing them or searching different terms."}
+  </div>
+)}
+
     </div>
   </div>);
 }

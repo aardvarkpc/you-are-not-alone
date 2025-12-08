@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 
 const SHEET_CSV_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS22WsDk6VTRkaDHD8PoQiPBVCVrTljc0TpsiKpIY9jNuUAa-Ax3leV4Qeh3jlcwXqjfLpWpsQom6P4/pub?output=csv";
+  "https://raw.githubusercontent.com/aardvarkpc/you-are-not-alone/refs/heads/main/public/data/shorts.csv";
 
 const IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent);
 
